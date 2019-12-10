@@ -1,0 +1,46 @@
+version: '3'
+services:
+
+  # The Application
+  php:
+    build: .
+    image: php:7.2-apache
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+      - ./php.ini:/usr/local/etc/php/php.ini
+    ports:
+      - 80:80  
+    environment:
+      - "DB_PORT=3306"
+      - "DB_HOST=database"
+
+  # The Database
+  database:
+    image: mysql:5.7.28
+    volumes:
+      - dbdata:/var/lib/mysql
+    environment:
+      - "MYSQL_DATABASE=homestead"
+      - "MYSQL_USER=homestead"
+      - "MYSQL_PASSWORD=secret"
+      - "MYSQL_ROOT_PASSWORD=secret"
+    ports:
+        - "33061:3306"
+
+  # phpmyadmin
+  phpmyadmin:
+    depends_on:
+      - database
+    image: phpmyadmin/phpmyadmin
+    volumes:
+      - ./phpmyadmin.ini:/usr/local/etc/php/php.ini
+    restart: always
+    ports:
+      - '8081:80'
+    environment:
+      PMA_HOST: database
+      MYSQL_ROOT_PASSWORD: secret
+
+volumes:
+  dbdata:
