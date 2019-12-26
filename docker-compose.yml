@@ -4,11 +4,11 @@ services:
   # The Application
   php:
     build: .
-    image: php:7.2-apache
+    image: php:7.3-apache
     working_dir: /var/www/html
     volumes:
-      - ./:/var/www/html
-      - ./php.ini:/usr/local/etc/php/php.ini
+      - ./src/:/var/www/html
+      - ./settings/php.ini:/usr/local/etc/php/php.ini
     ports:
       - 80:80  
     environment:
@@ -34,7 +34,7 @@ services:
       - database
     image: phpmyadmin/phpmyadmin
     volumes:
-      - ./phpmyadmin.ini:/usr/local/etc/php/php.ini
+      - ./settings/phpmyadmin.ini:/usr/local/etc/php/php.ini
     restart: always
     ports:
       - '8081:80'
